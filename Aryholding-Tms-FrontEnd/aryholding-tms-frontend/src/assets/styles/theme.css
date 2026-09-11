@@ -1,0 +1,176 @@
+/* Design Tokens & Theme Variables */
+:root {
+  /* Color Palette - Light Mode */
+  --bg-body: #F1F5F9;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #FFFFFF;
+  --bg-muted: #F8FAFC;
+  --bg-hover: #F1F5F9;
+  
+  --text-main: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --text-inverse: #FFFFFF;
+
+  --border-color: #E2E8F0;
+  --border-subtle: #EDF2F7;
+  --border-focus: #3B82F6;
+
+  /* Primary Brand */
+  --primary-color: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-light: #EFF6FF;
+  --primary-border: #BFDBFE;
+
+  /* Status Colors (Soft Pastel Badges) */
+  --status-open-bg: #EFF6FF;
+  --status-open-text: #1D4ED8;
+  --status-open-border: #BFDBFE;
+
+  --status-progress-bg: #FEF3C7;
+  --status-progress-text: #B45309;
+  --status-progress-border: #FDE68A;
+
+  --status-resolved-bg: #ECFDF5;
+  --status-resolved-text: #047857;
+  --status-resolved-border: #A7F3D0;
+
+  --status-closed-bg: #F1F5F9;
+  --status-closed-text: #475569;
+  --status-closed-border: #CBD5E1;
+
+  --status-cancelled-bg: #FEF2F2;
+  --status-cancelled-text: #B91C1C;
+  --status-cancelled-border: #FECACA;
+
+  /* Severity / Priority Colors */
+  --severity-critical-bg: #FEF2F2;
+  --severity-critical-text: #DC2626;
+  --severity-critical-border: #FECACA;
+
+  --severity-high-bg: #FFF7ED;
+  --severity-high-text: #EA580C;
+  --severity-high-border: #FED7AA;
+
+  --severity-medium-bg: #FEFCE8;
+  --severity-medium-text: #CA8A04;
+  --severity-medium-border: #FEF08A;
+
+  --severity-low-bg: #F0FDF4;
+  --severity-low-text: #16A34A;
+  --severity-low-border: #BBF7D0;
+
+  --severity-info-bg: #F0F9FF;
+  --severity-info-text: #0284C7;
+  --severity-info-border: #BAE6FD;
+
+  /* Inputs & Form Elements */
+  --input-bg: #FFFFFF;
+  --input-border: #CBD5E1;
+  --input-text: #0F172A;
+  --input-placeholder: #94A3B8;
+
+  /* Elevation Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 2px 8px -2px rgba(15, 23, 42, 0.08), 0 1px 4px -1px rgba(15, 23, 42, 0.04);
+  --shadow-card-hover: 0 12px 24px -6px rgba(15, 23, 42, 0.14), 0 4px 8px -2px rgba(15, 23, 42, 0.08);
+
+  /* Shimmer */
+  --skeleton-bg: #E2E8F0;
+  --skeleton-shimmer: rgba(255, 255, 255, 0.6);
+}
+
+/* Dark Mode Tokens */
+[data-theme="dark"],
+.dark {
+  --bg-body: #0F172A;
+  --bg-surface: #1E293B;
+  --bg-surface-elevated: #283548;
+  --bg-muted: #141E2E;
+  --bg-hover: #334155;
+  
+  --text-main: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #64748B;
+  --text-inverse: #0F172A;
+
+  --border-color: #334155;
+  --border-subtle: #1E293B;
+  --border-focus: #60A5FA;
+
+  /* Primary Brand */
+  --primary-color: #3B82F6;
+  --primary-hover: #60A5FA;
+  --primary-light: rgba(59, 130, 246, 0.18);
+  --primary-border: rgba(96, 165, 250, 0.35);
+
+  /* Status Colors */
+  --status-open-bg: rgba(59, 130, 246, 0.2);
+  --status-open-text: #93C5FD;
+  --status-open-border: rgba(96, 165, 250, 0.4);
+
+  --status-progress-bg: rgba(245, 158, 11, 0.2);
+  --status-progress-text: #FCD34D;
+  --status-progress-border: rgba(245, 158, 11, 0.4);
+
+  --status-resolved-bg: rgba(16, 185, 129, 0.2);
+  --status-resolved-text: #6EE7B7;
+  --status-resolved-border: rgba(16, 185, 129, 0.4);
+
+  --status-closed-bg: rgba(100, 116, 139, 0.25);
+  --status-closed-text: #CBD5E1;
+  --status-closed-border: rgba(148, 163, 184, 0.3);
+
+  --status-cancelled-bg: rgba(239, 68, 68, 0.2);
+  --status-cancelled-text: #FCA5A5;
+  --status-cancelled-border: rgba(239, 68, 68, 0.4);
+
+  /* Severity / Priority */
+  --severity-critical-bg: rgba(239, 68, 68, 0.22);
+  --severity-critical-text: #F87171;
+  --severity-critical-border: rgba(239, 68, 68, 0.45);
+
+  --severity-high-bg: rgba(249, 115, 22, 0.22);
+  --severity-high-text: #FB923C;
+  --severity-high-border: rgba(249, 115, 22, 0.45);
+
+  --severity-medium-bg: rgba(234, 179, 8, 0.22);
+  --severity-medium-text: #FDE047;
+  --severity-medium-border: rgba(234, 179, 8, 0.45);
+
+  --severity-low-bg: rgba(34, 197, 94, 0.2);
+  --severity-low-text: #86EFAC;
+  --severity-low-border: rgba(34, 197, 94, 0.4);
+
+  --severity-info-bg: rgba(14, 165, 233, 0.2);
+  --severity-info-text: #7DD3FC;
+  --severity-info-border: rgba(14, 165, 233, 0.4);
+
+  /* Inputs & Form Elements */
+  --input-bg: #141E2E;
+  --input-border: #334155;
+  --input-text: #F8FAFC;
+  --input-placeholder: #64748B;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 12px 28px rgba(0, 0, 0, 0.5);
+
+  /* Shimmer */
+  --skeleton-bg: #283548;
+  --skeleton-shimmer: rgba(255, 255, 255, 0.12);
+}
+
+/* Global Transitions */
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}

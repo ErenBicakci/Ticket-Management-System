@@ -1,0 +1,131 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: ticketsystem-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ticketsystemdb
+      POSTGRES_PASSWORD: 102030eb
+      POSTGRES_DB: ticketsystemdb
+    ports:
+      - "5444:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tms-net
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: apisix-redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    networks:
+      - tms-net
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: apisix-kafka
+    restart: always
+    ports:
+      - "9092:29092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
+      - tms-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
+    container_name: apisix-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - tms-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.17.2
+    container_name: apisix-kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - tms-net
+
+  apisix:
+    image: apache/apisix:3.18.0-debian
+    container_name: apisix-gateway
+    restart: always
+    volumes:
+      - ./apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+    depends_on:
+      - redis
+      - elasticsearch
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "9080:9080/tcp"
+      - "9091:9091/tcp"
+      - "9443:9443/tcp"
+    networks:
+      - tms-net
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: apisix-prometheus
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - apisix
+    networks:
+      - tms-net
+
+  grafana:
+    image: grafana/grafana:10.2.3
+    container_name: apisix-grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - tms-net
+
+volumes:
+  postgres_data:
+  redis_data:
+  es_data:
+  grafana_data:
+
+networks:
+  tms-net:
+    driver: bridge

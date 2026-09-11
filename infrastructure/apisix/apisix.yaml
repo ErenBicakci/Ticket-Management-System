@@ -1,0 +1,104 @@
+plugin_metadata:
+  - id: opentelemetry
+    resource:
+      service.name: apisix
+    collector:
+      address: "otel-collector:4318"
+      request_timeout: 3
+      request_headers:
+        Content-Type: application/x-protobuf
+    batch_span_processor:
+      drop_on_queue_full: false
+      max_queue_size: 1024
+      batch_timeout: 2
+      inactive_timeout: 1
+      max_export_batch_size: 16
+
+routes:
+  - id: auth-service
+    uris:
+      - /api/auth*
+    plugins:
+      cors: {}
+      opentelemetry:
+        sampler:
+          name: always_on
+      elasticsearch-logger:
+        endpoint_addrs:
+          - "http://elasticsearch:9200"
+        field:
+          index: "apisix-logs"
+          type: "_doc"
+        filter:
+          - ["request_method", "!=", "GET"]
+    upstream:
+      type: roundrobin
+      nodes:
+        "${{AUTHSERVICE_HOST}}:${{AUTHSERVICE_PORT}}": 1
+
+  - id: general-service
+    uris:
+      - /api/department*
+      - /api/category*
+      - /api/severity*
+      - /api/user*
+    plugins:
+      cors: {}
+      opentelemetry:
+        sampler:
+          name: always_on
+      limit-count:
+        count: 1000
+        time_window: 60
+        rejected_code: 429
+        key_type: var
+        key: remote_addr
+        policy: redis
+        redis_host: "redis"
+        redis_port: 6379
+        redis_database: 1
+      elasticsearch-logger:
+        endpoint_addrs:
+          - "http://elasticsearch:9200"
+        field:
+          index: "apisix-logs"
+          type: "_doc"
+        filter:
+          - ["request_method", "!=", "GET"]
+    upstream:
+      type: roundrobin
+      nodes:
+        "${{GENERALSERVICE_HOST}}:${{GENERALSERVICE_PORT}}": 1
+
+  - id: ticket-service
+    uris:
+      - /api/ticket*
+      - /api/comment*
+      - /api/ticketHistory*
+    plugins:
+      cors: {}
+      opentelemetry:
+        sampler:
+          name: always_on
+      limit-count:
+        count: 1000
+        time_window: 60
+        rejected_code: 429
+        key_type: var
+        key: remote_addr
+        policy: redis
+        redis_host: "redis"
+        redis_port: 6379
+        redis_database: 1
+      elasticsearch-logger:
+        endpoint_addrs:
+          - "http://elasticsearch:9200"
+        field:
+          index: "apisix-logs"
+          type: "_doc"
+        filter:
+          - ["request_method", "!=", "GET"]
+    upstream:
+      type: roundrobin
+      nodes:
+        "${{TICKETSERVICE_HOST}}:${{TICKETSERVICE_PORT}}": 1
